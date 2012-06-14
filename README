@@ -14,7 +14,10 @@ PubMed Link:
 http://www.ncbi.nlm.nih.gov/pubmed/22427938
 
 2. Setup and Installation
-See INSTALL for install instructions
+Requires GNU Make, g++, and CMake
+	git clone
+	cd repeatseq
+	make
 
 3. Required Input
 RepeatSeq requires a BAM file, a FASTA file, and a region file as the minimal parameters. 
@@ -36,6 +39,7 @@ Command-line Options:
 	-calls      write .calls file (**see pdf documentation for more information**)
 	-t          include user-defined tag in the output filename
 	-o          number of flanking bases to output from each read
+	-maxreads	Use only the first <maxreads> reads that align to each region for computing genotype
 
 5. Running RepeatSeq
 

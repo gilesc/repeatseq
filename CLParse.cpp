@@ -146,6 +146,12 @@ void parseSettings(char *argv[], int argc, SETTINGS_FILTERS &settings, string &b
 		else if (sw == "-calls") {
 			settings.makeCallsFile = true;
 		}
+		else if (sw == "-maxreads") {
+			++i;
+			settings.maxReadsPerRegion = atoi(argv[i]);
+			settings.paramString += ".D";
+			settings.paramString += argv[i];
+		}
 		else throw "IMPROPER COMMAND LINE ARGUMENT. Exiting..";
 	}
 }
@@ -173,6 +179,7 @@ void printArguments(){
 	cout << "\n\t -calls\t\twrite .calls file";
 	cout << "\n\t -t\t\tinclude user-defined tag in the output filename";
 	cout << "\n\t -o\t\tnumber of flanking bases to output from each read";
+	cout << "\n\t -maxreads\t\tUse only the first <maxreads> reads that align to each region for computing genotype";
 	cout << "\n";
 	cout << endl << "-----------------------------------------------------------" << endl;
 }

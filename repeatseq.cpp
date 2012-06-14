@@ -266,6 +266,7 @@ inline void print_output(string region,FastaReference* fr, ofstream &vcf,  ofstr
 	purity = atof(secondColumn.substr(pos,secondColumn.find('_',pos)).c_str());
 	
 	Region target(region);
+	cerr << region << endl;
 	if (target.startPos > target.stopPos) throw "Invalid input file...";
 	
 	//ensure target doesn't overrun end of chromosome
@@ -353,7 +354,8 @@ inline void print_output(string region,FastaReference* fr, ofstream &vcf,  ofstr
 	
 	//cout << "trying " << target.startSeq << ":" << target.startPos - 1 << "-" << target.stopPos - 1 << endl;
 	// iterate through alignments in this region,
-	while (reader.GetNextAlignment(al)) {
+	while (reader.GetNextAlignment(al) && 
+			toPrint.size() < settings.maxReadsPerRegion) {
 		//cout << " found\n";
 		insertions.clear();
 		insertionsQS.clear();
