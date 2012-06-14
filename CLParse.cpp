@@ -148,8 +148,14 @@ void parseSettings(char *argv[], int argc, SETTINGS_FILTERS &settings, string &b
 		}
 		else if (sw == "-maxreads") {
 			++i;
-			settings.maxReadsPerRegion = atoi(argv[i]);
+			settings.maxReadsAligned = atoi(argv[i]);
 			settings.paramString += ".D";
+			settings.paramString += argv[i];
+		}
+		else if (sw == "-maxconsidered") {
+			++i;
+			settings.maxReadsConsidered = atoi(argv[i]);
+			settings.paramString += ".C";
 			settings.paramString += argv[i];
 		}
 		else throw "IMPROPER COMMAND LINE ARGUMENT. Exiting..";

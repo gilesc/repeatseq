@@ -1,3 +1,9 @@
 *.swp
 *.o
 repeatseq
+*.vcf
+*.regions
+*.bam
+*.bai
+*.fa
+*.fai

@@ -1,28 +1,33 @@
-RepeatSeq v0.5.3
+# RepeatSeq v0.5.3
 
-1. Introduction
-RepeatSeq determines genotypes for microsatellite repeats in high-throughput sequencing data. RepeatSeq is available
-through the Virginia Tech non-commerical license. For more details on the license and use, see license.txt included in
-this distribution.
+## Introduction
+RepeatSeq determines genotypes for microsatellite repeats in high-throughput sequencing data. RepeatSeq is available through the Virginia Tech non-commerical license. For more details on the license and use, see license.txt included in this distribution.
 
 If you use this code, please cite our manuscript:
 
-J. Fondon III, A. Martin, S. Richards, R.A. Gibbs, and D. Mittelman (2012) Analysis of microsatellite variation in 
-drosophila melanogaster with population-scale genome sequencing. PLoS One, 7(3): e33036.
+J. Fondon III, A. Martin, S. Richards, R.A. Gibbs, and D. Mittelman (2012) Analysis of microsatellite variation in drosophila melanogaster with population-scale genome sequencing. PLoS One, 7(3): e33036.
 
 PubMed Link:
 http://www.ncbi.nlm.nih.gov/pubmed/22427938
 
-2. Setup and Installation
+## Setup and Installation
 Requires GNU Make, g++, and CMake
+
+To build:
 	git clone
 	cd repeatseq
 	make
 
-3. Required Input
+RepeatSeq is dynamically linked. To make it run, you must either:
+	sudo make install
+or 
+	cp bamtools/lib/* .
+or add the relative path bamtools/lib to your LD_LIBRARY_PATH
+
+## Required Input
 RepeatSeq requires a BAM file, a FASTA file, and a region file as the minimal parameters. 
 
-4. Optional Input
+## Optional Input
 
 The user to specify a number of command-line options to customize the behavior of RepeatSeq:
 
@@ -41,7 +46,7 @@ Command-line Options:
 	-o          number of flanking bases to output from each read
 	-maxreads	Use only the first <maxreads> reads that align to each region for computing genotype
 
-5. Running RepeatSeq
+## Running RepeatSeq
 
 Usage: repeatseq [options] <in.bam> <in.fasta> <in.regions>,
 

@@ -64,7 +64,8 @@ struct SETTINGS_FILTERS {
 	int consLeftFlank;
 	int consRightFlank;
 	int MapQuality;
-	int maxReadsPerRegion;
+	int maxReadsConsidered;
+	int maxReadsAligned;
 	string paramString;
 	
 	SETTINGS_FILTERS(){
@@ -81,7 +82,8 @@ struct SETTINGS_FILTERS {
 		consRightFlank = 3;
 		MapQuality = 0;
 		paramString = "";
-		maxReadsPerRegion = 10000;
+		maxReadsAligned = 10000;
+		maxReadsConsidered = 100000;
 	}
 };
 

@@ -1,0 +1,70 @@
+#!/usr/bin/env python
+import sys, tempfile, os, multiprocessing, subprocess, shutil, glob, shelve
+from contextlib import closing
+
+cache_prefix = os.path.join(os.getenv("HOME"), ".repeatseq-parallel-cache")
+
+def handle_region((args,path)):
+	i = int(os.path.basename(path).split(".")[0])
+	args = ["-t", str(i)] + args[:-1]
+	cmd = "repeatseq %s %s" % (" ".join(args), path)
+	print cmd
+	subprocess.call(cmd, shell=True)
+
+def split_regions(regions_file):
+	tmpdir = tempfile.mkdtemp()
+	with open(regions_file) as regions:
+		i = 0
+		out = open(os.path.join(tmpdir, str(i)+".regions"), "w")
+		for n,line in enumerate(regions):
+			if n % 10000 == 0:
+				i += 1
+				out.close()
+				out = open(os.path.join(tmpdir, str(i)+".regions"), "w")
+			out.write(line)
+		out.close()
+	return tmpdir
+
+if __name__ == "__main__":
+	args = sys.argv[1:]
+	try:
+		idx = args.index("-p")
+		args.pop(idx)
+		ncores = int(args[idx])
+		args.pop(idx)
+	except ValueError:
+		ncores = 1
+
+	bam, fasta, regions_file = args[-3:]
+	
+	try:
+		os.makedirs(cache_prefix)
+	except OSError:
+		pass
+
+	with closing(shelve.open(cache_prefix+"/db")) as cache:
+		idx = regions_file+"-"+str(os.stat(regions_file).st_mtime)
+		dir = cache.get(idx,None)
+		if not dir or not os.path.exists(dir):
+			dir = split_regions(regions_file)
+			cache[idx] = dir
+		
+	regions_file = sys.argv[-1]
+	sys.stderr.write("Starting repeatseq threads (%s)...\n" % ncores)
+	pool = multiprocessing.Pool(ncores)
+
+	pool.map(handle_region, 
+		((args, os.path.join(dir,p)) for p in os.listdir(dir)))
+
+	#TODO currently only handles VCF
+	with open(bam+".vcf","w") as out:
+		for i,file in enumerate(glob.glob(bam+".*.vcf")):
+			print file
+			with open(file) as lines:
+				header = "".join(lines.next() for x in range(6))
+				if i==0:
+					out.write(header)
+				for line in lines:
+					out.write(line)
+			os.unlink(file)
+			
